@@ -1,50 +1,71 @@
-use bevy::prelude::*;
+use bevy::{
+    core_pipeline::tonemapping::Tonemapping, prelude::*, sprite::MaterialMesh2dBundle,
+    window::WindowResized,
+};
 
-#[derive(Resource)]
-struct GreetTimer(Timer);
+fn setup_system(
+    mut commands: Commands,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut materials: ResMut<Assets<ColorMaterial>>,
+    asset_server: Res<AssetServer>,
+) {
+    commands.spawn((Camera2dBundle {
+        camera: Camera {
+            hdr: true, // 1. HDR is required for bloom
+            ..default()
+        },
+        tonemapping: Tonemapping::TonyMcMapface, // 2. Using a tonemapper that desaturates to white is recommended
+        ..default()
+    },));
 
-pub struct HelloPlugin;
+    commands.spawn(SpriteBundle {
+        texture: asset_server.load("jet.png"),
+        sprite: Sprite {
+            color: Color::rgb(5.0, 5.0, 5.0), // 4. Put something bright in a dark environment to see the effect
+            custom_size: Some(Vec2::splat(160.0)),
+            ..default()
+        },
+        ..default()
+    });
 
-impl Plugin for HelloPlugin {
-    fn build(&self, app: &mut App) {
-        app.insert_resource(GreetTimer(Timer::from_seconds(2.0, TimerMode::Repeating)))
-            .add_systems(Startup, add_people)
-            .add_systems(Update, (hello_world, (update_people, greet_people).chain()));
-    }
-}
-
-#[derive(Component)]
-struct Person;
-
-#[derive(Component)]
-struct Name(String);
-
-fn add_people(mut commands: Commands) {
-    commands.spawn((Person, Name("Elaine Proctor".to_string())));
-    commands.spawn((Person, Name("Renzo hume".to_string())));
-    commands.spawn((Person, Name("Zayna Nieves".to_string())));
-}
-
-fn greet_people(time: Res<Time>, mut timer: ResMut<GreetTimer>, query: Query<&Name, With<Person>>) {
-    if timer.0.tick(time.delta()).just_finished() {
-        for name in &query {
-            println!("hello {}!", name.0);
+    for i in -80..80 {
+        for j in 0..80 {
+            commands.spawn(MaterialMesh2dBundle {
+                mesh: meshes.add(Capsule2d::new(5.0, 5.0)).into(),
+                material: materials.add(Color::rgb(7.5, 0.0, 7.5)),
+                transform: Transform::from_translation(Vec3::new((j * 50) as f32, i as f32 * 50., 0.)),
+                ..default()
+            });
+            commands.spawn(MaterialMesh2dBundle {
+                mesh: meshes.add(Capsule2d::new(5.0, 5.0)).into(),
+                material: materials.add(Color::rgb(7.5, 0.0, 7.5)),
+                transform: Transform::from_translation(Vec3::new(
+                    (-1 * (j * 50)) as f32,
+                    i as f32 * 50.0,
+                    0.,
+                )),
+                ..default()
+            });
         }
     }
 }
 
-fn update_people(mut query: Query<&mut Name, With<Person>>) {
-    for mut name in &mut query {
-        if name.0 == "Elaine Proctor" {
-            name.0 = "Elaine Hume".to_string();
-            break;
-        }
+fn on_resize_system(mut resize_reader: EventReader<WindowResized>) {
+    for e in resize_reader.read() {
+        println!("width : {}", e.width);
+        println!("height: {}", e.height);
     }
 }
-fn hello_world() {
-    println!("hello world")
+
+fn update_system(mut query : Query<>) {
+    println!("hello this is update system")
 }
 
 fn main() {
-    App::new().add_plugins((DefaultPlugins, HelloPlugin)).run();
+    App::new()
+        .add_plugins(DefaultPlugins)
+        .add_systems(Startup, setup_system)
+        .add_systems(Update, on_resize_system)
+        .add_systems(Update, update_system)
+        .run();
 }
