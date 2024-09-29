@@ -4,27 +4,15 @@ use bevy::{
     color::Color,
     math::Vec3,
     prelude::{
-        default, App, Bundle, Circle, Commands, Component, Mesh, Query, Res, ResMut, Resource,
+        default, App, Circle, Commands, Component, Mesh, Query, Res, ResMut, Resource,
         Transform, With,
     },
-    sprite::{ColorMaterial, MaterialMesh2dBundle, SpriteBundle},
+    sprite::{ColorMaterial, MaterialMesh2dBundle},
     time::{Time, Timer, TimerMode},
     window::{PrimaryWindow, Window},
 };
 
 pub struct SpacePointPlugin;
-
-#[derive(Component)]
-struct Enemy;
-
-#[derive(Component)]
-struct XP(i32);
-
-#[derive(Bundle)]
-struct EnemyObjectBundle {
-    xp: XP,
-    sprite: SpriteBundle,
-}
 
 #[derive(Resource)]
 struct SpacePointTimer(Timer);

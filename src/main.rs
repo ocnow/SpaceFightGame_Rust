@@ -6,7 +6,7 @@ mod utils;
 mod event_handler_mod;
 
 use constants::CollisionSound;
-use event_handler_mod::event_handler_plugin;
+use event_handler_mod::EventHandlerPlugin;
 use player_jet_mod::JetPlugin;
 use eneymy_mod::EnemyPlugin;
 
@@ -38,7 +38,7 @@ fn main() {
         .add_plugins((
             JetPlugin,
             EnemyPlugin,
-            event_handler_plugin
+            EventHandlerPlugin
         ))
         .run();
 }

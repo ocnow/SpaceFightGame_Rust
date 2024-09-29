@@ -6,7 +6,7 @@ use bevy::{
 
 use crate::constants::{CollisionEvent, CollisionSound};
 
-pub struct event_handler_plugin;
+pub struct EventHandlerPlugin;
 
 fn play_collision_sound(
     mut commands: Commands,
@@ -27,7 +27,7 @@ fn play_collision_sound(
     }
 }
 
-impl Plugin for event_handler_plugin {
+impl Plugin for EventHandlerPlugin {
     fn build(&self, app: &mut App) {
         println!("This is the build process now");
         app.add_systems(FixedUpdate, play_collision_sound);
