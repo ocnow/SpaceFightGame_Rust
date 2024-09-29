@@ -1,25 +1,22 @@
 use bevy::{
-    a11y::accesskit::Size,
     app::{App, Plugin, Startup, Update},
-    asset::{AssetServer, Assets, Handle},
+    asset::{AssetServer, Handle},
     math::{
         bounding::{Aabb2d, BoundingCircle},
         Vec2, Vec3,
     },
     prelude::{
-        default, Bundle, Commands, Component, Deref, Entity, EventReader, EventWriter, Image,
+        default, Bundle, Commands, Component, Deref, Entity, EventWriter, Image,
         Query, Res, Transform, With,
     },
     sprite::{Sprite, SpriteBundle},
-    time::Time,
     window::{PrimaryWindow, Window},
 };
 use rand::{thread_rng, Rng};
 
 use crate::{
     constants::{
-        Bullet, CollisionEvent, CollisionSound, ENEMY_BULLET_STRUCK_EVENT, ENEMY_DIED_EVENT,
-        ENEMY_SQUARE_BOX_LENGTH,
+        Bullet, CollisionEvent, ENEMY_SPAWN_HEALTH, ENEMY_SQUARE_BOX_LENGTH
     },
     utils::ball_collision,
 };
@@ -61,7 +58,7 @@ fn get_enemy_bundle(image_handle: Handle<Image>, width: f32, height: f32) -> imp
     return (
         Enemy,
         EnemyObjectBundle {
-            xp: XP(20),
+            xp: XP(ENEMY_SPAWN_HEALTH),
             sprite: SpriteBundle {
                 texture: image_handle,
                 sprite: Sprite {

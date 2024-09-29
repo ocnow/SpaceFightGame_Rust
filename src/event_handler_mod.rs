@@ -1,6 +1,5 @@
 use bevy::{
-    app::{App, FixedUpdate, Plugin, Startup},
-    asset::AssetServer,
+    app::{App, FixedUpdate, Plugin},
     audio::{AudioBundle, PlaybackSettings},
     prelude::{Commands, EventReader, Res},
 };

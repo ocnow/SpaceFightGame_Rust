@@ -7,14 +7,12 @@ mod event_handler_mod;
 
 use constants::CollisionSound;
 use event_handler_mod::event_handler_plugin;
-use player_jet_mod::{Jet, JetPlugin};
-use space_point_plugin_mod::SpacePointPlugin;
+use player_jet_mod::JetPlugin;
 use eneymy_mod::EnemyPlugin;
 
 use bevy::{
-    a11y::accesskit::Rect, core_pipeline::tonemapping::Tonemapping, math::bounding::{Aabb2d, BoundingCircle, IntersectsVolume}, prelude::*, render::view::window, sprite::MaterialMesh2dBundle, window::{PrimaryWindow, WindowResized}
+    core_pipeline::tonemapping::Tonemapping, prelude::*
 };
-use rand::{thread_rng, Rng};
 
 
 fn setup_camera(

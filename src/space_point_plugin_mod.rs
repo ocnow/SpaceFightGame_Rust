@@ -1,17 +1,16 @@
 use bevy::{
-    app::{FixedUpdate, Plugin, Startup, Update},
-    asset::{AssetServer, Assets},
+    app::{Plugin, Startup, Update},
+    asset::Assets,
     color::Color,
     math::Vec3,
     prelude::{
         default, App, Bundle, Circle, Commands, Component, Mesh, Query, Res, ResMut, Resource,
         Transform, With,
     },
-    sprite::{ColorMaterial, MaterialMesh2dBundle, Sprite, SpriteBundle},
+    sprite::{ColorMaterial, MaterialMesh2dBundle, SpriteBundle},
     time::{Time, Timer, TimerMode},
     window::{PrimaryWindow, Window},
 };
-use rand::{thread_rng, Rng};
 
 pub struct SpacePointPlugin;
 

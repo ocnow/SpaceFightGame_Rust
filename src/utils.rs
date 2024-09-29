@@ -1,4 +1,4 @@
-use bevy::math::bounding::{Aabb2d, BoundingCircle, BoundingVolume, IntersectsVolume};
+use bevy::math::bounding::{Aabb2d, BoundingCircle, IntersectsVolume};
 
 pub fn ball_collision(bullet_circle : BoundingCircle, 
     bounding_box : Aabb2d
