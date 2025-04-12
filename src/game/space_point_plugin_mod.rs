@@ -4,10 +4,10 @@ use bevy::{
     color::Color,
     math::Vec3,
     prelude::{
-        default, App, Circle, Commands, Component, Mesh, Query, Res, ResMut, Resource,
+        default, App, Circle, Commands, Component, Mesh, Mesh2d, Query, Res, ResMut, Resource,
         Transform, With,
     },
-    sprite::{ColorMaterial, MaterialMesh2dBundle},
+    sprite::{ColorMaterial, MaterialMesh2dBundle, MeshMaterial2d},
     time::{Time, Timer, TimerMode},
     window::{PrimaryWindow, Window},
 };
@@ -29,29 +29,43 @@ fn setup_system(
         for j in 0..50 {
             commands.spawn((
                 SpacePoint,
-                MaterialMesh2dBundle {
-                    mesh: meshes.add(Circle::default()).into(),
-                    material: materials.add(Color::srgb(7.5, 0.0, 7.5)),
-                    transform: Transform::from_translation(Vec3::new(
-                        (j * 20) as f32,
-                        i as f32 * 20.,
-                        0.,
-                    )),
-                    ..default()
-                },
+                // MaterialMesh2dBundle {
+                //     mesh: meshes.add(Circle::default()).into(),
+                //     material: materials.add(Color::srgb(7.5, 0.0, 7.5)),
+                //     transform: Transform::from_translation(Vec3::new(
+                //         (j * 20) as f32,
+                //         i as f32 * 20.,
+                //         0.,
+                //     )),
+                //     ..default()
+                // },
+                (
+                    Mesh2d(meshes.add(Circle::default()).into()),
+                    MeshMaterial2d(materials.add(Color::srgb(7.5, 0.0, 7.5))),
+                    Transform::from_translation(Vec3::new((j * 20) as f32, i as f32 * 20., 0.)),
+                ),
             ));
             commands.spawn((
                 SpacePoint,
-                MaterialMesh2dBundle {
-                    mesh: meshes.add(Circle::default()).into(),
-                    material: materials.add(Color::srgb(7.5, 0.0, 7.5)),
-                    transform: Transform::from_translation(Vec3::new(
+                // MaterialMesh2dBundle {
+                //     mesh: meshes.add(Circle::default()).into(),
+                //     material: materials.add(Color::srgb(7.5, 0.0, 7.5)),
+                //     transform: Transform::from_translation(Vec3::new(
+                //         (-1 * (j * 20)) as f32,
+                //         i as f32 * 20.,
+                //         0.,
+                //     )),
+                //     ..default()
+                // },
+                (
+                    Mesh2d(meshes.add(Circle::default())),
+                    MeshMaterial2d(materials.add(Color::srgb(7.5, 0.0, 7.5))),
+                    Transform::from_translation(Vec3::new(
                         (-1 * (j * 20)) as f32,
                         i as f32 * 20.,
                         0.,
                     )),
-                    ..default()
-                },
+                ),
             ));
         }
     }
