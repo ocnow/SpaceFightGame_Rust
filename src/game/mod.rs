@@ -3,10 +3,8 @@ mod event_handler_mod;
 mod player_jet_mod;
 mod space_point_plugin_mod;
 
-use std::default;
-
 use crate::GameState;
-use bevy::{log::Level, prelude::*};
+use bevy::prelude::*;
 use eneymy_mod::EnemyPlugin;
 use event_handler_mod::EventHandlerPlugin;
 use player_jet_mod::{GameEntity, JetPlugin};

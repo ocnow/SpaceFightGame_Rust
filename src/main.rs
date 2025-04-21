@@ -26,6 +26,7 @@ fn setup_camera(mut commands: Commands) {
 }
 
 fn main() {
+    println!("Starting game...");
     App::new()
         .add_plugins(DefaultPlugins)
         .add_systems(Startup, setup_camera)

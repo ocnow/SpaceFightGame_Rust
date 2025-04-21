@@ -53,11 +53,6 @@ fn udpate_on_button_click(
     window_query: Query<&Window, With<PrimaryWindow>>,
     mut game_state: ResMut<NextState<GameState>>,
 ) {
-    // let mut jet_transform = query.single_mut();
-    // println!(
-    //     "jet pos:{},{}",
-    //     jet_transform.translation.x, jet_transform.translation.y
-    // );
     let window = window_query.get_single().unwrap();
     let window_height = window.height();
     let window_width = window.width();
@@ -111,16 +106,6 @@ fn create_bullets(
             commands.spawn((
                 GameEntity,
                 Bullet,
-                // MeshMaterial2d {
-                //     mesh: meshes.add(Circle::new(BULLET_CIRCLE_RADIUS)).into(),
-                //     material: materials.add(Color::srgb(0.5, 0.5, 1.)),
-                //     transform: Transform::from_translation(Vec3::new(
-                //         transform.translation.x,
-                //         transform.translation.y + (JET_SQUARE_BOX_LENGTH / 2.),
-                //         0.,
-                //     )),
-                //     ..default()
-                // },
                 Mesh2d(meshes.add(Circle::new(BULLET_CIRCLE_RADIUS))),
                 MeshMaterial2d(materials.add(Color::srgb(0.5, 0.5, 1.))),
                 Transform::from_translation(Vec3::new(
@@ -152,7 +137,6 @@ fn update_bullets(
 impl Plugin for JetPlugin {
     fn build(&self, app: &mut App) {
         println!("This is the build process now");
-        //app.insert_resource(SpacePointTimer(Timer::from_seconds(5.,TimerMode::Repeating)));
         app.insert_resource(BulletTimer(Timer::from_seconds(
             BULLET_CREATE_TIMER_SECONDS,
             TimerMode::Repeating,
@@ -166,6 +150,5 @@ impl Plugin for JetPlugin {
             )
                 .run_if(in_state(GameState::Game)),
         );
-        //app.add_systems(Update, update_background);
     }
 }
