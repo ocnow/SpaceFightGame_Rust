@@ -1,8 +1,7 @@
 use bevy::{
-    app::{App, FixedUpdate, Plugin, Update},
+    app::{App, Plugin, Update},
     asset::AssetServer,
-    audio::{AudioBundle, PlaybackSettings},
-    prelude::{in_state, Commands, EventReader, IntoSystemConfigs, OnEnter, Query, Res, With},
+    prelude::*,
 };
 
 use crate::{
@@ -10,12 +9,11 @@ use crate::{
     GameState,
 };
 
-use super::{LevelText, Score};
 
 pub struct EventHandlerPlugin;
 
 fn play_collision_sound(
-    mut commands: Commands,
+    commands: Commands,
     mut collision_events: EventReader<CollisionEvent>,
     sound: Res<CollisionSound>,
 ) {

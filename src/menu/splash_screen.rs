@@ -1,4 +1,4 @@
-use bevy::{color::palettes::css::RED, prelude::*};
+use bevy::prelude::*;
 
 use super::{super::GameState, despawn_screen};
 

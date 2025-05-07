@@ -15,13 +15,9 @@ pub const MY_ORANGE: Color = Color::srgb(222.0 / 255.0, 112.0 / 255.0, 40.0 / 25
 pub struct LevelText;
 
 #[derive(Resource)]
+#[derive(Default)]
 pub struct Score(usize);
 
-impl Default for Score {
-    fn default() -> Self {
-        Score(0)
-    }
-}
 
 pub fn game_plugin(app: &mut App) {
     app.init_resource::<Score>()
@@ -38,6 +34,6 @@ fn despawn_game(mut commands: Commands, mut query: Query<Entity, With<GameEntity
 
 fn setup_text(mut commands: Commands, asset_server: Res<AssetServer>, score: Res<Score>) {
     commands
-        .spawn((Text::new(format!("Score : ")), LevelText))
+        .spawn((Text::new("Score : ".to_string()), LevelText))
         .with_child(TextSpan::new("0"));
 }

@@ -1,19 +1,12 @@
 use std::usize;
+use bevy::prelude::*;
 
 use bevy::{
-    app::{App, Plugin, Startup, Update},
-    asset::{AssetServer, Assets, Handle},
-    math::{
-        bounding::{Aabb2d, BoundingCircle},
-        Vec2, Vec3,
-    },
-    prelude::{
-        default, in_state, Bundle, Circle, Commands, Component, Deref, Entity, EventWriter, Image,
-        IntoSystemConfigs, Mesh, Mesh2d, OnEnter, Query, Rectangle, Res, ResMut, Single, Text,
+    app::{App, Plugin, Update}, asset::{AssetServer, Assets, Handle}, ecs::{schedule::IntoScheduleConfigs, system::SystemParamFunction}, math::Vec3, prelude::{
+        default, in_state, Bundle, Commands, Component, Deref, Entity, EventWriter, Image,
+         OnEnter, Query, Res, ResMut, Single, Text,
         TextUiWriter, Transform, With,
-    },
-    sprite::{ColorMaterial, MeshMaterial2d, Sprite},
-    window::{PrimaryWindow, Window},
+    }, sprite::Sprite, window::{PrimaryWindow, Window}
 };
 use rand::{thread_rng, Rng};
 
@@ -25,15 +18,16 @@ use crate::{
     GameState,
 };
 
+use super::player_jet_mod::observe_bullet_event;
 use super::{
-    player_jet_mod::{GameEntity, Jet},
+    player_jet_mod::{GameEntity, SpaceShip},
     LevelText, Score,
 };
 
 pub struct EnemyPlugin;
 
 #[derive(Component)]
-struct Enemy;
+pub struct Enemy;
 
 #[derive(Component, Deref)]
 struct XP(i32);
@@ -49,7 +43,7 @@ fn create_space_enemy_objects(
     mut commands: Commands,
     window_query: Query<&Window, With<PrimaryWindow>>,
 ) {
-    let window = window_query.get_single().unwrap();
+    let window = window_query.single().unwrap();
     let window_width = window.width();
     let window_height = window.height();
 
@@ -72,7 +66,7 @@ fn create_space_enemy_objects(
             scale: ENEMY_OBJECT_SCALE.extend(1.),
             ..default()
         },
-    ));
+    )).observe(observe_bullet_event);
 }
 
 fn get_enemy_bundle(image_handle: Handle<Image>, width: f32, height: f32) -> impl Bundle {
@@ -82,9 +76,10 @@ fn get_enemy_bundle(image_handle: Handle<Image>, width: f32, height: f32) -> imp
             ..(width / 2.) - (ENEMY_SQUARE_BOX_LENGTH / 2.0),
     );
     let y = rng.gen_range(0.0..(height / 2.) - (ENEMY_SQUARE_BOX_LENGTH / 2.0));
-    return (
+    (
         GameEntity,
         Enemy,
+        SpaceShip,
         EnemyObjectBundle {
             xp: XP(ENEMY_SPAWN_HEALTH),
             sprite: Sprite {
@@ -92,7 +87,7 @@ fn get_enemy_bundle(image_handle: Handle<Image>, width: f32, height: f32) -> imp
                 ..default()
             },
         },
-    );
+    )
 }
 
 fn check_for_collision(
@@ -136,15 +131,16 @@ fn check_for_collision(
                     let pos_x = (top_left_enemy_x - bullet_center_x).abs();
 
                     let idx = (pos_y as usize * enemy_size_f32.x as usize + pos_x as usize) * 4;
-                    let alpha = enemy_image.data[idx as usize];
+                    let alpha = enemy_image.data.clone().unwrap();
+                    let alpha = alpha[idx];
                     if alpha > 0 {
                         println!("collision happened");
                         commands.entity(bullet_entity).despawn();
-                        collision_events.send_default();
-                        xp.0 = xp.0 - 1;
+                        collision_events.write_default();
+                        xp.0 -= 1;
                         println!("xp now is {}", xp.0);
                         if xp.0 == 0 {
-                            let window = window_query.get_single().unwrap();
+                            let window = window_query.single().unwrap();
                             let window_width = window.width();
                             let window_height = window.height();
 
@@ -188,9 +184,10 @@ impl Plugin for EnemyPlugin {
         println!("This is the build process now");
         app.add_event::<CollisionEvent>();
         app.add_systems(OnEnter(GameState::Game), create_space_enemy_objects);
-        app.add_systems(
-            Update,
-            check_for_collision.run_if(in_state(GameState::Game)),
-        );
+        // app.add_systems(
+        //     Update,
+        //     check_for_collision.run_if(in_state(GameState
+        //             ::Game))
+        // );
     }
 }

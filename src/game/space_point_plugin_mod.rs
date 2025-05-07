@@ -3,11 +3,8 @@ use bevy::{
     asset::Assets,
     color::Color,
     math::Vec3,
-    prelude::{
-        default, App, Circle, Commands, Component, Mesh, Mesh2d, Query, Res, ResMut, Resource,
-        Transform, With,
-    },
-    sprite::{ColorMaterial, MaterialMesh2dBundle, MeshMaterial2d},
+    prelude::*,
+    sprite::{ColorMaterial, MeshMaterial2d},
     time::{Time, Timer, TimerMode},
     window::{PrimaryWindow, Window},
 };
@@ -40,7 +37,7 @@ fn setup_system(
                 //     ..default()
                 // },
                 (
-                    Mesh2d(meshes.add(Circle::default()).into()),
+                    Mesh2d(meshes.add(Circle::default())),
                     MeshMaterial2d(materials.add(Color::srgb(7.5, 0.0, 7.5))),
                     Transform::from_translation(Vec3::new((j * 20) as f32, i as f32 * 20., 0.)),
                 ),
@@ -61,7 +58,7 @@ fn setup_system(
                     Mesh2d(meshes.add(Circle::default())),
                     MeshMaterial2d(materials.add(Color::srgb(7.5, 0.0, 7.5))),
                     Transform::from_translation(Vec3::new(
-                        (-1 * (j * 20)) as f32,
+                        -(j * 20) as f32,
                         i as f32 * 20.,
                         0.,
                     )),
@@ -82,7 +79,7 @@ fn update_background(
 
     if timer.0.tick(time.delta()).just_finished() {
         for mut transform in &mut query {
-            transform.translation.y = transform.translation.y + 10.0;
+            transform.translation.y += 10.0;
             if transform.translation.y > window_height / 2. {
                 transform.translation.y = 0. + (transform.translation.y - window_height / 2.);
             }

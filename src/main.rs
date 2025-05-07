@@ -3,11 +3,10 @@ mod game;
 mod menu;
 mod utils;
 
-use constants::CollisionSound;
 use game::game_plugin;
 use menu::menu_plugin;
 
-use bevy::{core_pipeline::tonemapping::Tonemapping, prelude::*};
+use bevy::prelude::*;
 
 #[derive(Resource, Debug, Component, PartialEq, Eq, Clone, Copy)]
 struct Volume(u32);
@@ -22,7 +21,7 @@ enum GameState {
 }
 
 fn setup_camera(mut commands: Commands) {
-    commands.spawn(Camera2dBundle::default());
+    commands.spawn(Camera2d);
 }
 
 fn main() {
